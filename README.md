@@ -1,5 +1,5 @@
 # A Toolkit for Fast Targeted Syntactic Evaluation
-This toolkit only takes **~3 minutes** to evaluate a language model on all the tasks of targetd syntactic evaluation ([Marvin and Linzen, 2018](https://www.aclweb.org/anthology/D18-1151)).
+This toolkit takes **only ~3 minutes** to evaluate a language model on all the tasks of targetd syntactic evaluation ([Marvin and Linzen, 2018](https://www.aclweb.org/anthology/D18-1151)).
 
 ## Dependencies
 PyTorch 1.1.0 (I have not tested the latest PyTorch, but it should work) <br>
