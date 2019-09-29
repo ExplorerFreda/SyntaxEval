@@ -27,7 +27,7 @@ python example.py
 
 
 ## Citation
-If you find this software useful in your research, please consider citing it as follows
+If you find this software useful in your research, please consider citing it as follows:
 ```
 @software{shi2019toolkit,
   author = {Haoyue Shi},
