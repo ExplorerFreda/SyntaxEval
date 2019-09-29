@@ -21,7 +21,9 @@ Note: the definition above implies that same sentences must have same probabilit
 
 ## Example
 The following command evaluates GPT-2 model:
-``` python example.py ```
+```bash
+python example.py 
+```
 
 
 ## Citation
