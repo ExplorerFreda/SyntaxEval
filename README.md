@@ -2,17 +2,18 @@
 Fast targeted syntactic evaluation ([Marvin and Linzen, 2018](https://www.aclweb.org/anthology/D18-1151)). 
 
 ## Dependencies
-PyTorch 1.1.0 (not tested under the latest PyTorch, but it should work)
+PyTorch 1.1.0 (I have not tested the latest PyTorch, but it should work) <br>
 transformers (formerly pytorch_transformers and pytorch_pretrained_bert)
 
 ## Usage
 To evaluate a custom language model, you will need a language model class with a member function `prob_score`.
+
 The `prob_score` function takes a batch of strings (i.e., untokenized sentences) as input, and outputs a list of float indicating the "probability score" of each sentence according to the language model. 
 
-### Probability Scores
-Let P(s; LM) denote the probability of sentence s given by the language model LM. Then a function f(s) is a valid probability score function using this language model, if and only if the following statement is true:
+### Definition: Probability Scores
+Let *P(s; LM)* denote the probability of sentence *s* given by the language model *LM*. Then a function *f(s)* is a valid probability score function using this language model, if and only if the following statement is true:
 
-For any two sentences s1 and s2, if P(s1; LM) >= P(s2; LM), then f(s1) >= f(s2). 
+For any two sentences *s1* and *s2*, if *P(s1; LM) >= P(s2; LM)*, then *f(s1) >= f(s2)*. 
 
 For example, log probability is a valid probability score function. 
 
