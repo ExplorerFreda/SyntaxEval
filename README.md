@@ -1,6 +1,3 @@
-<script src="//yihui.name/js/math-code.js"></script>
-<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
 # A Toolkit for Fast Targeted Syntactic Evaluation
 Fast targeted syntactic evaluation ([Marvin and Linzen, 2018](https://www.aclweb.org/anthology/D18-1151)). 
 
