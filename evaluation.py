@@ -44,7 +44,7 @@ class Evaluator(object):
             self.logger = logging.getLogger(__name__)
             self.logger.setLevel(logging.INFO)
             formatter = logging.Formatter('%(message)s')
-            handler = logging.FileHandler(args.log, 'w')
+            handler = logging.FileHandler(self.log_path, 'w')
             handler.setLevel(logging.INFO)
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
