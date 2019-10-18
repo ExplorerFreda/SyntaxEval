@@ -1,3 +1,6 @@
 [submodule "LM_syneval"]
 	path = LM_syneval
 	url = https://github.com/BeckyMarvin/LM_syneval.git
+[submodule "colorlessgreenRNNs"]
+	path = colorlessgreenRNNs
+	url = https://github.com/facebookresearch/colorlessgreenRNNs.git
