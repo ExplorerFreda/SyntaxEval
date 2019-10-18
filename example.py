@@ -1,3 +1,4 @@
+import argparse
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
@@ -15,9 +16,9 @@ def generate_length_masks(lengths, max_length=None):
 
 
 class GPTLMEval(object):
-    def __init__(self):
-        self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-        self.model = GPT2LMHeadModel.from_pretrained('gpt2')
+    def __init__(self, lm_name):
+        self.tokenizer = GPT2Tokenizer.from_pretrained(lm_name)
+        self.model = GPT2LMHeadModel.from_pretrained(lm_name)
         if torch.cuda.is_available():
             self.model = self.model.cuda()
 
@@ -55,8 +56,7 @@ class GPTLMEval(object):
             -1, lm_scores.shape[-1])
         length_masks = generate_length_masks(lengths)[:, 1:]
         labels = id_batch[:, 1:].contiguous().view(-1)
-        selected_log_probs = lm_log_probs[
-            labels.new_tensor(torch.arange(labels.shape[0])), labels]
+        selected_log_probs = lm_log_probs[torch.arange(labels.shape[0]), labels]
         selected_log_probs = selected_log_probs.contiguous().view(
             id_batch.size(0), -1)
         valid_log_probs = selected_log_probs * length_masks
@@ -64,6 +64,13 @@ class GPTLMEval(object):
 
 
 if __name__ == '__main__':
-    model = GPTLMEval()
-    evaluator = Evaluator()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--lm-name', type=str, default='gpt2')
+    parser.add_argument('--log-path', type=str, default=None)
+    parser.add_argument('--batch-size', type=int, default=128)
+    args = parser.parse_args()
+    model = GPTLMEval(args.lm_name)
+    evaluator = Evaluator(
+        correct_sent=True, log_path=args.log_path, batch_size=args.batch_size
+    )
     evaluator.evaluate(model)

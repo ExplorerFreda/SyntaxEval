@@ -12,7 +12,7 @@ class Evaluator(object):
             data_path: a folder consists of pickle files provided by Marvin and Linzen (2018).
             log_path: (default None) if given, output the result to the log path. 
     """
-    def __init__(self, data_path='./LM_syneval/EMNLP2018/templates/', log_path=None, batch_size=128):
+    def __init__(self, data_path='./LM_syneval/EMNLP2018/templates/', log_path=None, batch_size=128, correct_sent=False):
 
         self.groups = [
             ['Simple', ['simple_agrmt']],
@@ -53,6 +53,7 @@ class Evaluator(object):
             self.logger = None
         
         self.batch_size = batch_size
+        self.correct_sent = correct_sent
 
     """
         Run evaluation for a specific model. 
@@ -78,6 +79,13 @@ class Evaluator(object):
                 lbs.append(len(sentences))
                 sentences.extend(instance)
                 rbs.append(len(sentences))
+            if self.correct_sent:
+                for i, sent in enumerate(sentences):
+                    if 'a' <= sent[0] <= 'z':
+                        sent = chr(ord(sent[0]) - ord('a') + ord('A')) + sent[1:]
+                    if sent[-1] != '.':
+                        sent = sent + '.'
+                    sentences[i] = sent
             for start in range(0, len(sentences), self.batch_size):
                 end = min(len(sentences), start + self.batch_size)
                 sent_batch = sentences[start:end]
