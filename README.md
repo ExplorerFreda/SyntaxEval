@@ -1,9 +1,13 @@
-# A Toolkit for Fast Targeted Syntactic Evaluation
-This toolkit takes **only ~3 minutes** to evaluate a language model on all the tasks of targetd syntactic evaluation ([Marvin and Linzen, 2018](https://www.aclweb.org/anthology/D18-1151)).
+# A Toolkit for Fast Morphosyntactic Evaluation
+This toolkit performs fast evaluation on two morphosyntactic evaluation tasks:
+- Marvin and Linzen, "[Targeted syntactic evaluation of language models](https://www.aclweb.org/anthology/D18-1151)"*, EMNLP 2018
+- Gulordava et al., *"[Colorless green recurrent networks dream hierarchically](https://www.aclweb.org/anthology/N18-1108.pdf)"*, NAACL 2018
+
+It takes **only ~3 minutes** to evaluate a language model on all the tasks of targetd syntactic evaluation.
 
 ## Dependencies
-PyTorch 1.1.0 (I have not tested the latest PyTorch, but it should work) <br>
-transformers (formerly pytorch_transformers and pytorch_pretrained_bert)
+PyTorch >= 1.2.0 <br>
+transformers (for the evaluation of a pretrained language model)
 
 ## Usage
 To evaluate a custom language model, you will need a language model class with a member function `prob_score`.
@@ -22,8 +26,9 @@ Note: the definition above implies that same sentences must have same probabilit
 ## Example
 The following command evaluates GPT-2 model:
 ```bash
-python example.py 
+python main.py 
 ```
+For detailed or customized evaluation, please refer to the arguments in `main.py`. 
 
 
 ## Citation
@@ -31,7 +36,7 @@ If you find this software useful in your research, please consider citing it as 
 ```
 @software{shi2019toolkit,
   author = {Haoyue Shi},
-  title = {A Toolkit for Fast Targeted Syntactic Evaluation},
+  title = {A Toolkit for Fast Morphosyntactic Evaluation},
   url = {https://github.com/explorerfreda/syntaxeval}
   year = {2019}
 }
