@@ -1,6 +1,6 @@
 # A Toolkit for Fast Morphosyntactic Evaluation
 This toolkit performs fast evaluation on two morphosyntactic evaluation tasks:
-- Marvin and Linzen, "[Targeted syntactic evaluation of language models](https://www.aclweb.org/anthology/D18-1151)"*, EMNLP 2018
+- Marvin and Linzen, *"[Targeted syntactic evaluation of language models](https://www.aclweb.org/anthology/D18-1151)"*, EMNLP 2018
 - Gulordava et al., *"[Colorless green recurrent networks dream hierarchically](https://www.aclweb.org/anthology/N18-1108.pdf)"*, NAACL 2018
 
 It takes **only ~3 minutes** to evaluate a language model on all the tasks of targetd syntactic evaluation.
