@@ -7,7 +7,7 @@ It takes **only ~3 minutes** to evaluate a language model on all the tasks of ta
 
 ## Dependencies
 PyTorch >= 1.2.0 <br>
-transformers (for the evaluation of a pretrained language model)
+transformers == 2.0.0 (for the evaluation of a pretrained language model)
 
 ## Usage
 To evaluate a custom language model, you will need a language model class with a member function `prob_score`.

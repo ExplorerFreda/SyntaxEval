@@ -1,4 +1,20 @@
 import spacy
+import torch 
+
+
+"""
+    given a batch of lengths with size (B, ), generate length mask with size 
+        (B, maxL). Positions within the sentence length are marked as 1, 
+        otherwise 0
+"""
+def generate_length_masks(lengths, max_length=None):
+    max_length = max(lengths)
+    ids = torch.arange(max_length).unsqueeze(0).expand(len(lengths), -1)
+    lengths = torch.tensor(lengths).unsqueeze(1).expand_as(ids)
+    length_masks = (ids < lengths).float()
+    if torch.cuda.is_available():
+        length_masks = length_masks.cuda()
+    return length_masks
 
 
 quote_pairs = {
