@@ -22,7 +22,8 @@ if __name__ == '__main__':
         elif 'bert' in tokenizer_name:
             tokenizer = BertTokenizer.from_pretrained(tokenizer_name)
         else:
-            tokenizer = XLNetTokenizer.from_pretrained(tokenizer_name)
+            tokenizer = XLNetTokenizer.from_pretrained(tokenizer_name)       
+        evaluator_nonsensical.filter_by_tokenizer(tokenizer)
         evaluator_synthetic.filter_by_tokenizer(tokenizer)
 
     pprint(evaluator_synthetic.group_metadata())

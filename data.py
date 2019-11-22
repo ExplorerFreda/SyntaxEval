@@ -31,14 +31,23 @@ class Evaluator(object):
         for group_name in self.data:
             new_data[group_name] = list()
             for eval_instance in self.data[group_name]:
+                eval_instance = list(eval_instance)
+                if type(eval_instance[0]) is list:
+                    for i, item in enumerate(eval_instance):
+                        eval_instance[i] = ' '.join(item)
                 tokenized_sents = [tokenizer.tokenize(sent) for sent in eval_instance]
                 remove_flag = False
+                prev_different_point = None
                 for sent in tokenized_sents[1:]:
                     if len(tokenized_sents[0]) != len(sent):
                         remove_flag = True
                         break
                     different_points = sum([1 if tokenized_sents[0][i] != sent[i] else 0 for i in range(len(sent))])
-                    if different_points > 1:
+                    if different_points != 1:
+                        remove_flag = True
+                        break
+                    curr_different_point = sum([i if tokenized_sents[0][i] != sent[i] else 0 for i in range(len(sent))])
+                    if (prev_different_point is not None) and curr_different_point != prev_different_point:
                         remove_flag = True
                         break
                 if not remove_flag:
@@ -137,7 +146,34 @@ class SyntheticEvaluator(Evaluator):
                 print(group_name, '{:.2f}'.format(float(correct_cnt)/test_cnt))
             else:
                 print('{:.2f}'.format(float(correct_cnt)/test_cnt))
-
+    
+    def evaluate_masked(self, model, print_name=True):
+        assert self.batch_size == 1  # useless, just for sanity checking
+        for group in self.groups:
+            group_name = group[0]
+            correct_cnt = test_cnt = 0
+            for instance in self.data[group_name]:
+                instance = list(instance)
+                # TODO(freda): use correct_sentence in utils.py
+                if self.correct_sent:  
+                    for i, sent in enumerate(instance):
+                        if 'a' <= sent[0] <= 'z':
+                            sent = chr(ord(sent[0]) - ord('a') + ord('A')) + sent[1:]
+                        if sent[-1] != '.':
+                            sent = sent + '.'
+                        instance[i] = sent
+                batch_score = model.prob_score(instance)
+                correct_label = 'T' if batch_score[0] > max(batch_score)-1e-10 else 'F'
+                correct_cnt += 1 if correct_label == 'T' else 0 
+                test_cnt += 1
+                if self.logger is not None:
+                    self.logger.info('{:s}\t{:8.5f}\t{:s}'.format(correct_label, batch_score[0], instance[0]))
+                    for idx in range(1, len(batch_score)):
+                        self.logger.info(' \t{:8.5f}\t{:s}'.format(batch_score[idx], instance[idx]))
+            if print_name:
+                print(group_name, '{:.2f}'.format(float(correct_cnt)/test_cnt))
+            else:
+                print('{:.2f}'.format(float(correct_cnt)/test_cnt))
 
 class NonsensicalEvaluator(Evaluator):
     """
@@ -194,10 +230,13 @@ class NonsensicalEvaluator(Evaluator):
                 rbs.append(len(sentences))
             if self.correct_sent:
                 for i, sent in enumerate(sentences):
+                    if type(sent) is str:
+                        sent = sent.split()
                     sentences[i] = correct_sentence(sent)
             else:
                 for i, sent in enumerate(sentences):
-                    sentences[i] = ' '.join(sent)
+                    if type(sent) is list:
+                        sentences[i] = ' '.join(sent)
             for start in range(0, len(sentences), self.batch_size):
                 end = min(len(sentences), start + self.batch_size)
                 sent_batch = sentences[start:end]
@@ -212,6 +251,33 @@ class NonsensicalEvaluator(Evaluator):
                     self.logger.info('{:s}\t{:8.5f}\t{:s}'.format(correct_label, scores[lb], sentences[lb]))
                     for idx in range(lb+1, rb):
                         self.logger.info(' \t{:8.5f}\t{:s}'.format(scores[idx], sentences[idx]))
+            if print_name:
+                print(group_name, '{:.2f}'.format(float(correct_cnt)/test_cnt))
+            else:
+                print('{:.2f}'.format(float(correct_cnt)/test_cnt))
+    
+    def evaluate_masked(self, model, print_name=True):
+        for group_name in self.data:
+            correct_cnt = test_cnt = 0
+            for instance in self.data[group_name]:
+                instance = list(instance)
+                if self.correct_sent:
+                    for i, sent in enumerate(instance):
+                        if type(sent) is str:
+                            sent = sent.split()
+                        instance[i] = correct_sentence(sent)
+                else:
+                    for i, sent in enumerate(instance):
+                        if type(sent) is list:
+                            sentences[i] = ' '.join(sent)
+                batch_score = model.prob_score(instance)
+                correct_label = 'T' if batch_score[0] > max(batch_score)-1e-10 else 'F'
+                correct_cnt += 1 if correct_label == 'T' else 0 
+                test_cnt += 1
+                if self.logger is not None:
+                    self.logger.info('{:s}\t{:8.5f}\t{:s}'.format(correct_label, batch_score[0], instance[0]))
+                    for idx in range(1, len(batch_score)):
+                        self.logger.info(' \t{:8.5f}\t{:s}'.format(batch_score[idx], instance[idx]))
             if print_name:
                 print(group_name, '{:.2f}'.format(float(correct_cnt)/test_cnt))
             else:
