@@ -6,7 +6,47 @@ import utils
 from utils import correct_sentence
 
 
-class SyntheticEvaluator(object):
+class Evaluator(object):
+    def __init__(self):
+        pass
+
+    """
+        Returns group metadata, i.e., how many instances in each evaluation group. 
+    """
+    def group_metadata(self):
+        metadata = dict()
+        for group_name in self.data:
+            metadata[group_name] = len(self.data[group_name])
+        return metadata
+
+    """
+        Filter out the sentences which can be evaluated by a specific model, as BERT is a masked language model based on BPE. 
+        Thus, it can only tackle syntactic tests which consists of two sentences with the same number of tokens. 
+        Input:
+            tokenizer: the tokenizer of a given model, defined by the huggingface repo. 
+                Docs can be found here: https://huggingface.co/transformers
+    """
+    def filter_by_tokenizer(self, tokenizer):
+        new_data = dict()
+        for group_name in self.data:
+            new_data[group_name] = list()
+            for eval_instance in self.data[group_name]:
+                tokenized_sents = [tokenizer.tokenize(sent) for sent in eval_instance]
+                remove_flag = False
+                for sent in tokenized_sents[1:]:
+                    if len(tokenized_sents[0]) != len(sent):
+                        remove_flag = True
+                        break
+                    different_points = sum([1 if tokenized_sents[0][i] != sent[i] else 0 for i in range(len(sent))])
+                    if different_points > 1:
+                        remove_flag = True
+                        break
+                if not remove_flag:
+                    new_data[group_name].append(eval_instance)
+        self.data = new_data
+
+
+class SyntheticEvaluator(Evaluator):
     """
         Initialize the evaluator.
         Input: 
@@ -16,6 +56,7 @@ class SyntheticEvaluator(object):
     """
     def __init__(self, data_path='./LM_syneval/EMNLP2018/templates/', 
             logger=None, batch_size=128, correct_sent=False):
+        super(SyntheticEvaluator, self).__init__()
         self.groups = [
             ['Simple', ['simple_agrmt']],
             ['In a sentential complement', ['sent_comp']],
@@ -98,7 +139,7 @@ class SyntheticEvaluator(object):
                 print('{:.2f}'.format(float(correct_cnt)/test_cnt))
 
 
-class NonsensicalEvaluator(object):
+class NonsensicalEvaluator(Evaluator):
     """
         Initialize the evaluator.
         Input: 
@@ -107,6 +148,7 @@ class NonsensicalEvaluator(object):
     """
     def __init__(self, data_path='./colorlessgreenRNNs/data/agreement/English', 
             logger=None, batch_size=128, correct_sent=False):
+        super(NonsensicalEvaluator, self).__init__()
         self.data = {'Nonsensical': list()}
         curr_sent_pair = list()
         info_path = os.path.join(data_path, 'generated.tab')
