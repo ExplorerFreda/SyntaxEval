@@ -6,6 +6,7 @@ This toolkit performs fast evaluation on two morphosyntactic evaluation tasks:
 It takes **only ~3 minutes** to evaluate a language model on all the tasks of targetd syntactic evaluation.
 
 ## Dependencies
+Python 3.7 
 SpaCy <br>
 PyTorch >= 1.2.0 <br>
 transformers == 2.0.0 (for the evaluation of a pretrained language model)
