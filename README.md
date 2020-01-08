@@ -33,13 +33,3 @@ python main.py
 For detailed or customized evaluation, please refer to the arguments in `main.py`. 
 
 
-## Citation
-If you find this software useful in your research, please consider citing it as follows:
-```
-@software{shi2019toolkit,
-  author = {Haoyue Shi},
-  title = {A Toolkit for Fast Morphosyntactic Evaluation},
-  url = {https://github.com/explorerfreda/syntaxeval}
-  year = {2019}
-}
-```
