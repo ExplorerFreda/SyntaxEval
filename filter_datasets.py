@@ -1,5 +1,6 @@
 import argparse
 import logging
+import os
 from pprint import pprint
 import torch
 from transformers import BertTokenizer, XLNetTokenizer, RobertaTokenizer
@@ -9,13 +10,16 @@ from models import GPT2LM
 
 
 if __name__ == '__main__':
+    # create evaluators
     evaluator_nonsensical = NonsensicalEvaluator(correct_sent=True)
     evaluator_synthetic = SyntheticEvaluator(correct_sent=True)
 
     pprint(evaluator_synthetic.group_metadata())
     pprint(evaluator_nonsensical.group_metadata())
 
-    for tokenizer_name in ['bert-base-uncased', 'bert-large-uncased', 'xlnet-base-cased', 'xlnet-large-cased', 'roberta-base', 'roberta-large']:
+    # enumerate considered LMs' tokenizers, and drop invalid test cases
+    for tokenizer_name in ['bert-base-uncased', 'bert-large-uncased', 
+            'xlnet-base-cased', 'xlnet-large-cased', 'roberta-base', 'roberta-large']:
         print(tokenizer_name)
         if 'roberta' in tokenizer_name:
             tokenizer = RobertaTokenizer.from_pretrained(tokenizer_name)
@@ -28,4 +32,6 @@ if __name__ == '__main__':
 
     pprint(evaluator_synthetic.group_metadata())
     pprint(evaluator_nonsensical.group_metadata())
+    # save common evaluators 
+    os.system('mkdir data')
     torch.save((evaluator_synthetic, evaluator_nonsensical), './data/common_evaluators.pt')

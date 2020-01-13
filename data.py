@@ -120,7 +120,7 @@ class SyntheticEvaluator(Evaluator):
                 lbs.append(len(sentences))
                 sentences.extend(instance)
                 rbs.append(len(sentences))
-            # TODO(freda): use correct_sentence in utils.py
+            # TODO(freda): may use correct_sentence in utils.py
             if self.correct_sent:  
                 for i, sent in enumerate(sentences):
                     if 'a' <= sent[0] <= 'z':
@@ -147,6 +147,10 @@ class SyntheticEvaluator(Evaluator):
             else:
                 print('{:.2f}'.format(float(correct_cnt)/test_cnt))
     
+    """
+        Run evaluation for a masked language model.
+        Input and output are the same as above. 
+    """
     def evaluate_masked(self, model, print_name=True):
         assert self.batch_size == 1  # useless, just for sanity checking
         for group in self.groups:
@@ -154,7 +158,7 @@ class SyntheticEvaluator(Evaluator):
             correct_cnt = test_cnt = 0
             for instance in self.data[group_name]:
                 instance = list(instance)
-                # TODO(freda): use correct_sentence in utils.py
+                # TODO(freda): may use correct_sentence in utils.py
                 if self.correct_sent:  
                     for i, sent in enumerate(instance):
                         if 'a' <= sent[0] <= 'z':
@@ -174,6 +178,7 @@ class SyntheticEvaluator(Evaluator):
                 print(group_name, '{:.2f}'.format(float(correct_cnt)/test_cnt))
             else:
                 print('{:.2f}'.format(float(correct_cnt)/test_cnt))
+
 
 class NonsensicalEvaluator(Evaluator):
     """
@@ -206,7 +211,7 @@ class NonsensicalEvaluator(Evaluator):
         self.correct_sent = correct_sent
 
     """
-        Run evaluation for a specific model. 
+        Run evaluation for a specific (normal) language model. 
         Input: 
             model: a language model, which is able to calculate "probability 
             score" of a batch of sentences, using 
@@ -256,6 +261,10 @@ class NonsensicalEvaluator(Evaluator):
             else:
                 print('{:.2f}'.format(float(correct_cnt)/test_cnt))
     
+    """
+        Run evaluation for a masked language model.
+        Input and output are the same as above. 
+    """
     def evaluate_masked(self, model, print_name=True):
         for group_name in self.data:
             correct_cnt = test_cnt = 0

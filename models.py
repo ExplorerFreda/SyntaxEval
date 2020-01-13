@@ -41,6 +41,17 @@ class GPT2LM(object):
         log_prob = self.collect_log_prob(input_batch, lm_scores, lengths)
         return log_prob.tolist()
 
+    """
+        Batched computation to collect log probabilities from a language model. 
+        Input: 
+            id_batch (BatchSize, MaxLength): the original sentence.
+            lm_scores (BatchSize, MaxLength, |Vocab|): the computed LM score for each position 
+                and each possible token; used to compute log probability via a softmax operator. 
+            lengths (BatchSize, ): the length of each sentence, in terms of token. 
+        Output:
+            prob_scores (B, ): a list of float, indicating probability scores
+            of the input sentences. 
+    """
     @staticmethod
     def collect_log_prob(id_batch, lm_scores, lengths):
         # generate length masks
