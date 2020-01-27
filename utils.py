@@ -106,8 +106,6 @@ def correct_sentence(words):
     # Note that the code only works for English sentences. 
     # (TODO) Consider other languages. 
     # (TODO) Handle more possible special cases. 
-    words_in_new_sentence = new_sentence.split(' ')
-    words_in_new_sentence[0] = regex.sub(
-        '\pL', lambda obj: obj.group(0).upper(), words_in_new_sentence[0], count=1)
-    new_sentence = ' '.join(words_in_new_sentence)
+    new_sentence = regex.sub(
+        '[ \pL]', lambda obj: obj.group(0).upper(), new_sentence, count=1)  # \pL: match letters
     return new_sentence
