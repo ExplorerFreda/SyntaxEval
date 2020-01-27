@@ -32,8 +32,16 @@ def match(left, right):
 
 
 """
-    Perform sentence correction: recover sentences in natural language from 
-        a list of words. 
+    Perform sentence correction: recover sentences in natural language as much as possible 
+        from a list of words. 
+    Input: list[str] words
+    Output: str new_sentence
+    Explanation: the reason for doing sentence correction is that the pretrained 
+        models are trained on real sentences (usually with capital initial character 
+        and punctuations; however, the synthetic syntax evaluation dataset provides 
+        a list of words, which are all lowercased -- we might want to recover the 
+        'natural' sentences from such lists of words to see the 'real' performance 
+        of pretrained models. 
 """
 def correct_sentence(words):
     words = nlp(' '.join(words))
@@ -81,12 +89,27 @@ def correct_sentence(words):
             new_words.append(w.text)
         
     new_sentence = ' '.join(new_words)
-    # capitalize the initial character
-    if not 'A' <= new_sentence[0] <= 'Z':
+    
+    # check empty sequence. 
+    if len(new_sentence) == 0:
+        return new_sentence
+    
+    # Capitalize the initial character.
+    # There might be a new_sentence as follows: "we went there yesterday", he said. 
+    #   - We would like to capitalize the "w" in "we", instead of the first character, i.e., left quote mark. 
+    # There can also be a sentence as follows: 10 dollars were paid. 
+    #   - We would not like to capitalize the "d" in "dollars". 
+    # Given above, an empirical solution is to find the first English character in the sentence, which is in the
+    #   first word of the sentence (i.e., not preceded by any space), and capitalize it (if applicable) to 
+    #   perform sentence ocrrection. 
+    # Note that the code only works for English sentences. 
+    # (TODO) Consider other languages. 
+    if not 'A' <= new_sentence[0] <= 'Z':  # do not do caplization if already capitalized, i.e., in {A, ..., Z}
         position = 0
-        while (position < len(new_sentence) - 1) and (not 'a' <= new_sentence[position] <= 'z') and (new_sentence[position] != ' '):
+        # find the correct position to be capitalized 
+        while (position < len(new_sentence) - 1) and (not 'a' <= new_sentence[position] <= 'z') \
+                and (not 'A' <= new_sentence[position] <= 'Z') and (new_sentence[position] != ' '):
             position += 1
-        if len(new_sentence) > 0 and 'a' <= new_sentence[position] <= 'z':
-            new_sentence = new_sentence[:position] + chr(ord('A') + ord(new_sentence[position]) - ord('a')) + new_sentence[position+1:]
+        if 'a' <= new_sentence[position] <= 'z':
+            new_sentence = new_sentence[:position] + new_sentence[position].upper() + new_sentence[position+1:]
     return new_sentence
-        
