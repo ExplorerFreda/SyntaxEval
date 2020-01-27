@@ -34,8 +34,8 @@ def match(left, right):
 """
     Perform sentence correction: recover sentences in natural language as much as possible 
         from a list of words. 
-    Input: list[str] words
-    Output: str new_sentence
+    Input: list[str] words: list of words before correction.
+    Output: str new_sentence: sentence after correction. 
     Explanation: the reason for doing sentence correction is that the pretrained 
         models are trained on real sentences (usually with capital initial character 
         and punctuations; however, the synthetic syntax evaluation dataset provides 
