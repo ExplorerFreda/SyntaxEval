@@ -12,6 +12,14 @@ PyTorch >= 1.2.0 <br>
 transformers == 2.0.0 (for the evaluation of a pretrained language model)
 
 ## Usage
+
+Example usage:
+```
+git clone --recursive https://github.com/ExplorerFreda/SyntaxEval.git
+python filter_datasets.py  # preprocessing
+python python main.py --lm-name gpt2 --batch-size 32 --load-evaluator-path ./data/common evaluators.pt
+```
+
 To evaluate a custom language model, you will need a language model class with a member function `prob_score`.
 
 The `prob_score` function takes a batch of strings (i.e., untokenized sentences) as input, and outputs a list of float indicating the "probability score" of each sentence according to the language model. 
