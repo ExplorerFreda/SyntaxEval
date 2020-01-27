@@ -104,6 +104,7 @@ def correct_sentence(words):
     #   perform sentence ocrrection. 
     # Note that the code only works for English sentences. 
     # (TODO) Consider other languages. 
+    # (TODO) Handle more possible special cases. 
     if not 'A' <= new_sentence[0] <= 'Z':  # do not do caplization if already capitalized, i.e., in {A, ..., Z}
         position = 0
         # find the correct position to be capitalized 
