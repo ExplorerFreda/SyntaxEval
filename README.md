@@ -8,8 +8,9 @@ It takes **only ~3 minutes** to evaluate a language model on all the tasks of ta
 ## Dependencies
 Python 3.7 <br>
 SpaCy <br>
+regex <br>
 PyTorch >= 1.2.0 <br>
-transformers == 2.0.0 (for the evaluation of a pretrained language model)
+transformers == 2.0.0 (for the evaluation of a pretrained language model) <br>
 
 ## Usage
 
