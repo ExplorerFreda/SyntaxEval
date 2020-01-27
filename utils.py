@@ -1,5 +1,6 @@
 import spacy
 import torch 
+import regex
 
 
 """
@@ -105,12 +106,8 @@ def correct_sentence(words):
     # Note that the code only works for English sentences. 
     # (TODO) Consider other languages. 
     # (TODO) Handle more possible special cases. 
-    if not 'A' <= new_sentence[0] <= 'Z':  # do not do caplization if already capitalized, i.e., in {A, ..., Z}
-        position = 0
-        # find the correct position to be capitalized 
-        while (position < len(new_sentence) - 1) and (not 'a' <= new_sentence[position] <= 'z') \
-                and (not 'A' <= new_sentence[position] <= 'Z') and (new_sentence[position] != ' '):
-            position += 1
-        if 'a' <= new_sentence[position] <= 'z':
-            new_sentence = new_sentence[:position] + new_sentence[position].upper() + new_sentence[position+1:]
+    words_in_new_sentence = new_sentence.split(' ')
+    words_in_new_sentence[0] = regex.sub(
+        '\pL', lambda obj: obj.group(0).upper(), words_in_new_sentence[0], count=1)
+    new_sentence = ' '.join(words_in_new_sentence)
     return new_sentence
