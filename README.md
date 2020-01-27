@@ -13,12 +13,14 @@ transformers == 2.0.0 (for the evaluation of a pretrained language model)
 
 ## Usage
 
-Example usage:
+Example (evaluating GPT-2):
 ```
 git clone --recursive https://github.com/ExplorerFreda/SyntaxEval.git
 python filter_datasets.py  # preprocessing
 python python main.py --lm-name gpt2 --batch-size 32 --load-evaluator-path ./data/common evaluators.pt
 ```
+
+For detailed or customized evaluation, please refer to the arguments in `main.py`. 
 
 To evaluate a custom language model, you will need a language model class with a member function `prob_score`.
 
@@ -33,11 +35,5 @@ For example, log probability is a valid probability score function.
 
 Note: the definition above implies that same sentences must have same probability score. 
 
-## Example
-The following command evaluates GPT-2 model:
-```bash
-python main.py 
-```
-For detailed or customized evaluation, please refer to the arguments in `main.py`. 
 
 
