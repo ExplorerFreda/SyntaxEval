@@ -13,7 +13,7 @@ transformers == 2.0.0 (for the evaluation of a pretrained language model)
 
 ## Usage
 
-Example (evaluating GPT-2):
+### Example (evaluating GPT-2)
 ```
 git clone --recursive https://github.com/ExplorerFreda/SyntaxEval.git
 python filter_datasets.py  # preprocessing
