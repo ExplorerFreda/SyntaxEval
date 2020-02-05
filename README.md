@@ -18,7 +18,7 @@ transformers == 2.0.0 (for the evaluation of a pretrained language model) <br>
 ```
 git clone --recursive https://github.com/ExplorerFreda/SyntaxEval.git
 python filter_datasets.py  # preprocessing
-python python main.py --lm-name gpt2 --batch-size 32 --load-evaluator-path ./data/common evaluators.pt
+python main.py --lm-name gpt2 --batch-size 32 --load-evaluator-path ./data/common evaluators.pt
 ```
 
 For detailed or customized evaluation, please refer to the arguments in `main.py`. 
